@@ -7,7 +7,7 @@ const fs = require("fs");
 // Sets up the Express App
 // =============================================================
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
@@ -54,31 +54,14 @@ app.delete("/api/notes/:id", function (req, res) {
     const idToDelete = parseInt(req.params.id);
     fs.readFile("./notetakingapp/db/db.json", "utf-8", (err, data) => {
         const parsed = JSON.parse(data);
-        console.log(parsed)
         const filtered = parsed.filter(e => e.id !== idToDelete);
         const stringified = JSON.stringify(filtered);
-        console.log(filtered, stringified, idToDelete)
         fs.writeFileSync("./notetakingapp/db/db.json", stringified, "utf-8", (err) => {
             if (err) throw err;
         })
         res.json(stringified)
     });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Starts the server to begin listening
 // =============================================================
